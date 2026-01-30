@@ -30,6 +30,7 @@
                     </div>
                 </a>
                 <nav class="nav-links" id="navLinks">
+                    <a href="#research">AI Research</a>
                     <a href="#services">Services</a>
                     <a href="#market">Marketplace</a>
                     <a href="#business">For Business</a>
@@ -112,6 +113,113 @@
                         </div>
                         <div class="hero-card-footer">
                             <button class="btn primary full">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deep Research Section -->
+            <section class="section research-section" id="research">
+                <div class="container">
+                    <div class="section-header">
+                        <h2><i class="fa-solid fa-magnifying-glass-chart"></i> AI-Powered Deep Research</h2>
+                        <p>Find exactly what you need with intelligent search and insights powered by data analytics.</p>
+                    </div>
+                    
+                    <div class="research-container">
+                        <div class="research-tabs">
+                            <button class="tab-btn active" data-tab="services">
+                                <i class="fa-solid fa-screwdriver-wrench"></i> Services
+                            </button>
+                            <button class="tab-btn" data-tab="products">
+                                <i class="fa-solid fa-shopping-cart"></i> Products
+                            </button>
+                            <button class="tab-btn" data-tab="compare">
+                                <i class="fa-solid fa-code-compare"></i> Compare
+                            </button>
+                        </div>
+
+                        <!-- Services Research Tab -->
+                        <div class="research-tab-content active" id="tab-services">
+                            <div class="research-form">
+                                <h3>Smart Service Discovery</h3>
+                                <div class="form-group">
+                                    <label>What service do you need?</label>
+                                    <input type="text" id="service-query" placeholder="E.g., electrician, plumber, cleaning..." class="form-input">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Maximum Budget (₹)</label>
+                                        <input type="number" id="service-budget" placeholder="Optional" class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Location Preference</label>
+                                        <input type="text" id="service-location" placeholder="Optional" class="form-input">
+                                    </div>
+                                </div>
+                                <button class="btn primary" id="research-services-btn">
+                                    <i class="fa-solid fa-robot"></i> Start Deep Research
+                                </button>
+                            </div>
+                            <div id="services-results" class="research-results"></div>
+                        </div>
+
+                        <!-- Products Research Tab -->
+                        <div class="research-tab-content" id="tab-products">
+                            <div class="research-form">
+                                <h3>Smart Product Discovery</h3>
+                                <div class="form-group">
+                                    <label>What product are you looking for?</label>
+                                    <input type="text" id="product-query" placeholder="E.g., rice, saree, electronics..." class="form-input">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Min Price (₹)</label>
+                                        <input type="number" id="product-min-price" placeholder="Optional" class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max Price (₹)</label>
+                                        <input type="number" id="product-max-price" placeholder="Optional" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Minimum Rating</label>
+                                    <select id="product-min-rating" class="form-input">
+                                        <option value="">Any Rating</option>
+                                        <option value="4.5">4.5★ and above</option>
+                                        <option value="4.0">4.0★ and above</option>
+                                        <option value="3.5">3.5★ and above</option>
+                                    </select>
+                                </div>
+                                <button class="btn primary" id="research-products-btn">
+                                    <i class="fa-solid fa-robot"></i> Start Deep Research
+                                </button>
+                            </div>
+                            <div id="products-results" class="research-results"></div>
+                        </div>
+
+                        <!-- Compare Tab -->
+                        <div class="research-tab-content" id="tab-compare">
+                            <div class="research-form">
+                                <h3>Compare Services or Products</h3>
+                                <p class="help-text">Select 2-5 items to compare side by side with AI-powered insights.</p>
+                                <div class="form-group">
+                                    <label>Comparison Type</label>
+                                    <select id="compare-type" class="form-input">
+                                        <option value="services">Services</option>
+                                        <option value="products">Products</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Item IDs (comma-separated)</label>
+                                    <input type="text" id="compare-ids" placeholder="E.g., 1,2,3" class="form-input">
+                                    <small>Enter 2-5 item IDs separated by commas</small>
+                                </div>
+                                <button class="btn primary" id="compare-btn">
+                                    <i class="fa-solid fa-balance-scale"></i> Compare Now
+                                </button>
+                            </div>
+                            <div id="compare-results" class="research-results"></div>
                         </div>
                     </div>
                 </div>

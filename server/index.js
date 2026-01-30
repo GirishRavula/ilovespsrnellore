@@ -13,6 +13,7 @@ const servicesRoutes = require('./routes/services');
 const productsRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
 const businessesRoutes = require('./routes/businesses');
+const researchRoutes = require('./routes/research');
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use('/api/services', servicesRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/businesses', businessesRoutes);
+app.use('/api/research', researchRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -121,6 +123,7 @@ app.listen(PORT, '0.0.0.0', () => {
 ║   • GET  /api/services   - List services                  ║
 ║   • GET  /api/products   - List products                  ║
 ║   • GET  /api/businesses - List businesses                ║
+║   • POST /api/research   - AI-powered deep research       ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
     `);

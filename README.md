@@ -87,6 +87,8 @@ npm start
 
 - ✅ **Services Marketplace** - Book local services (electrician, plumber, cleaning, etc.)
 - ✅ **E-commerce** - Shop local products (groceries, fashion, electronics)
+- ✅ **AI-Powered Deep Research** - Intelligent search with insights, recommendations, and comparisons
+- ✅ **Smart Comparison Tool** - Compare multiple services/products side-by-side with AI recommendations
 - ✅ **Business Registration** - Vendors can register and manage their offerings
 - ✅ **Secure Authentication** - JWT-based login with bcrypt password hashing
 - ✅ **Shopping Cart** - Add items to cart and checkout
@@ -213,6 +215,50 @@ Authorization: Bearer <token>
   "delivery_area": "Magunta Layout",
   "payment_method": "cod"
 }
+```
+
+### Deep Research & AI (NEW 🔥)
+```bash
+# Research services with AI insights
+POST /api/research/services
+Content-Type: application/json
+{
+  "query": "electrician",
+  "budget": 1000,
+  "location": "Nellore"
+}
+
+# Research products with AI insights
+POST /api/research/products
+Content-Type: application/json
+{
+  "query": "rice",
+  "min_price": 100,
+  "max_price": 500,
+  "min_rating": 4.0
+}
+
+# Compare services side-by-side
+POST /api/research/compare/services
+Content-Type: application/json
+{
+  "service_ids": [1, 2, 3]
+}
+
+# Compare products side-by-side
+POST /api/research/compare/products
+Content-Type: application/json
+{
+  "product_ids": [1, 2, 3, 4]
+}
+
+# Get AI recommendations (requires authentication)
+GET /api/research/recommendations?type=all
+Authorization: Bearer <token>
+
+# Get detailed analytics for service/product
+GET /api/research/analytics/service/1
+GET /api/research/analytics/product/1
 ```
 
 For complete API documentation, see the individual route files in `server/routes/`.

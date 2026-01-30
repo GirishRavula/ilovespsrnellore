@@ -1130,3 +1130,360 @@ body {
         font-size: 1rem;
     }
 }
+
+/* Deep Research Section Styles */
+.research-section {
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.research-container {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 32px;
+    border: 1px solid var(--border);
+}
+
+.research-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 12px 24px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    background: rgba(79, 140, 255, 0.1);
+    color: var(--primary);
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+.research-tab-content {
+    display: none;
+}
+
+.research-tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.research-form {
+    background: var(--bg-alt);
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+}
+
+.research-form h3 {
+    margin-bottom: 24px;
+    color: var(--text);
+    font-size: 1.4rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(79, 140, 255, 0.05);
+}
+
+.form-input::placeholder {
+    color: rgba(183, 192, 209, 0.5);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.help-text {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.research-results {
+    min-height: 100px;
+}
+
+.results-header {
+    background: var(--bg-alt);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+}
+
+.results-header h3 {
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.insight-card {
+    background: var(--card);
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.insight-card .label {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+.insight-card .value {
+    color: var(--text);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.recommendations-section {
+    margin-top: 32px;
+}
+
+.recommendations-section h4 {
+    color: var(--text);
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+}
+
+.recommendation-group {
+    margin-bottom: 28px;
+}
+
+.recommendation-group h5 {
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.result-item {
+    background: var(--bg-alt);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(79, 140, 255, 0.15);
+}
+
+.result-item h4 {
+    color: var(--text);
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.result-item .category {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+}
+
+.result-item .price {
+    color: var(--accent);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.result-item .rating {
+    color: var(--warning);
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.result-item .vendor {
+    color: var(--muted);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.verified-badge {
+    color: var(--accent);
+    font-size: 0.85rem;
+}
+
+.comparison-table {
+    background: var(--bg-alt);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    margin-top: 24px;
+}
+
+.comparison-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.comparison-table th {
+    padding: 12px;
+    text-align: left;
+    color: var(--primary);
+    border-bottom: 2px solid var(--border);
+}
+
+.comparison-table td {
+    padding: 12px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+}
+
+.best-choice {
+    background: rgba(34, 197, 94, 0.1);
+    border: 2px solid var(--accent);
+}
+
+.recommendation-banner {
+    background: linear-gradient(135deg, rgba(79, 140, 255, 0.2), rgba(34, 197, 94, 0.2));
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 24px;
+    border: 1px solid var(--primary);
+}
+
+.recommendation-banner h4 {
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.recommendation-banner p {
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--muted);
+    gap: 12px;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    color: #fca5a5;
+    margin-top: 20px;
+}
+
+/* Responsive Design for Research Section */
+@media (max-width: 768px) {
+    .research-container {
+        padding: 20px;
+    }
+    
+    .research-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+}

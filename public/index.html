@@ -4,300 +4,437 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iLoveSPSR Nellore | Services & Marketplace</title>
-    <meta name="description" content="Book local services and shop products in SPSR Nellore - Home services, repairs, food delivery, and more.">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Toast Container -->
-    <div id="toastContainer" class="toast-container"></div>
-
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="authModalTitle">Login</h2>
-                <button class="modal-close" onclick="closeAuthModal()">&times;</button>
-            </div>
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Login</button>
-                <button class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Register</button>
-            </div>
-            <!-- Login Form -->
-            <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-submit">Login</button>
-                <p class="form-footer">Demo: priya@gmail.com / customer123</p>
-            </form>
-            <!-- Register Form -->
-            <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="regName" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="regEmail" placeholder="your@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Phone</label>
-                    <input type="tel" id="regPhone" placeholder="9876543210" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="regPassword" placeholder="Min 6 characters" required minlength="6">
-                </div>
-                <button type="submit" class="btn-submit">Create Account</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Cart Sidebar -->
-    <div id="cartSidebar" class="cart-sidebar">
-        <div class="cart-header">
-            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
-            <button class="modal-close" onclick="closeCart()">&times;</button>
-        </div>
-        <div id="cartBody" class="cart-body">
-            <div class="cart-empty">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <p>Your cart is empty</p>
-            </div>
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <span>Total</span>
-                <span id="cartTotal" class="cart-total-amount">₹0</span>
-            </div>
-            <button class="btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
-        </div>
-    </div>
-
-    <!-- Checkout Modal -->
-    <div id="checkoutModal" class="modal-overlay">
-        <div class="modal modal-lg">
-            <div class="modal-header">
-                <h2>Checkout</h2>
-                <button class="modal-close" onclick="closeCheckout()">&times;</button>
-            </div>
-            <div id="checkoutContent">
-                <!-- Checkout content will be dynamically inserted -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Cart Overlay -->
-    <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
-
     <div class="page">
-        <!-- Top Bar -->
         <div class="topbar">
             <div class="container topbar-inner">
-                <span><i class="fa-solid fa-location-dot"></i> SPSR Nellore, Andhra Pradesh</span>
-                <span class="topbar-divider">|</span>
-                <span><i class="fa-solid fa-circle-check"></i> Verified Local Services</span>
+                <span><i class="fa-solid fa-location-dot"></i> Nellore, Andhra Pradesh</span>
+                <span class="topbar-divider"></span>
+                <span><i class="fa-solid fa-circle-check"></i> Verified local services & stores</span>
             </div>
         </div>
 
-        <!-- Header -->
         <header class="site-header">
             <div class="container nav">
-                <a class="brand" href="#">
+                <a class="brand" href="#home">
                     <span class="brand-mark">IL</span>
                     <div class="brand-text">
                         <strong>iLoveSPSR Nellore</strong>
-                        <small>Services • Marketplace</small>
+                        <small>Services • Marketplace • Local</small>
                     </div>
                 </a>
-                <nav class="nav-links">
+                <nav class="nav-links" id="navLinks">
+                    <a href="#research">AI Research</a>
                     <a href="#services">Services</a>
-                    <a href="#products">Products</a>
-                    <a href="#about">About</a>
+                    <a href="#market">Marketplace</a>
+                    <a href="#business">For Business</a>
+                    <a href="#testimonials">Reviews</a>
+                    <a href="#contact">Contact</a>
                 </nav>
-                <div class="nav-actions" id="navActions">
-                    <!-- Auth buttons (shown when logged out) -->
-                    <div id="authButtons">
-                        <button class="btn ghost" onclick="showAuthModal('login')">Login</button>
-                        <button class="btn primary" onclick="showAuthModal('register')">Sign Up</button>
-                    </div>
-                    <!-- User menu (shown when logged in) -->
-                    <div id="userMenu" class="user-menu" style="display:none;">
-                        <button class="btn icon cart-btn" onclick="showCart()">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <span id="cartBadge" class="cart-badge">0</span>
-                        </button>
-                        <div class="user-avatar" onclick="toggleUserDropdown()">
-                            <span id="userInitials">U</span>
-                        </div>
-                        <div id="userDropdown" class="user-dropdown">
-                            <div class="user-dropdown-header">
-                                <span id="userName">User</span>
-                                <small id="userEmail">user@email.com</small>
-                            </div>
-                            <div class="user-dropdown-divider"></div>
-                            <a class="user-dropdown-item" href="#orders"><i class="fa-solid fa-box"></i> My Orders</a>
-                            <a class="user-dropdown-item" href="#profile"><i class="fa-solid fa-user"></i> Profile</a>
-                            <div class="user-dropdown-divider"></div>
-                            <button class="user-dropdown-item" onclick="handleLogout()"><i class="fa-solid fa-sign-out-alt"></i> Logout</button>
-                        </div>
-                    </div>
+                <div class="nav-actions">
+                    <button class="btn ghost">List Your Business</button>
+                    <button class="btn primary">Start Shopping</button>
+                    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
             </div>
         </header>
 
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="container hero-grid">
-                <div class="hero-content">
-                    <span class="pill"><i class="fa-solid fa-bolt"></i> Local Services Platform</span>
-                    <h1>Book Services & Shop Local in Nellore</h1>
-                    <p class="lead">From home repairs to fresh groceries - find trusted services and products from verified local businesses.</p>
-                    <div class="hero-actions">
-                        <a href="#services" class="btn primary lg">Browse Services</a>
-                        <a href="#products" class="btn outline lg">Shop Products</a>
-                    </div>
-                </div>
-                <div class="hero-visual">
-                    <div class="hero-card">
-                        <i class="fa-solid fa-home"></i>
-                        <span>Home Services</span>
-                    </div>
-                    <div class="hero-card">
-                        <i class="fa-solid fa-utensils"></i>
-                        <span>Food & Groceries</span>
-                    </div>
-                    <div class="hero-card">
-                        <i class="fa-solid fa-spa"></i>
-                        <span>Personal Care</span>
-                    </div>
-                    <div class="hero-card">
-                        <i class="fa-solid fa-truck"></i>
-                        <span>Fast Delivery</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Services Section -->
-        <section class="section" id="services">
-            <div class="container">
-                <div class="section-header">
-                    <span class="pill">Our Services</span>
-                    <h2>What We Offer</h2>
-                    <p>Professional services delivered by verified local experts</p>
-                </div>
-                <div id="servicesGrid" class="services-grid">
-                    <!-- Services loaded dynamically -->
-                    <div class="loading"><div class="loading-spinner"></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Products Section -->
-        <section class="section section-alt" id="products">
-            <div class="container">
-                <div class="section-header">
-                    <span class="pill">Marketplace</span>
-                    <h2>Shop Local Products</h2>
-                    <p>Fresh groceries, handloom, electronics and more from Nellore</p>
-                </div>
-                <div id="productsGrid" class="products-grid">
-                    <!-- Products loaded dynamically -->
-                    <div class="loading"><div class="loading-spinner"></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section class="section" id="about">
-            <div class="container">
-                <div class="about-grid">
-                    <div class="about-content">
-                        <span class="pill">About Us</span>
-                        <h2>Built for Nellore, by Nellore</h2>
-                        <p>iLoveSPSR Nellore is a local platform connecting customers with trusted service providers and businesses in the SPSR Nellore district.</p>
-                        <ul class="about-features">
-                            <li><i class="fa-solid fa-check-circle"></i> Verified local businesses</li>
-                            <li><i class="fa-solid fa-check-circle"></i> Secure online payments</li>
-                            <li><i class="fa-solid fa-check-circle"></i> Fast doorstep delivery</li>
-                            <li><i class="fa-solid fa-check-circle"></i> 24/7 customer support</li>
-                        </ul>
-                    </div>
-                    <div class="about-stats">
-                        <div class="stat-card">
-                            <span class="stat-number">500+</span>
-                            <span class="stat-label">Services</span>
+        <main>
+            <section class="hero" id="home">
+                <div class="container hero-grid">
+                    <div class="hero-content">
+                        <span class="pill"><i class="fa-solid fa-bolt"></i> All-in-one local platform</span>
+                        <h1>Find trusted services and shop local products in Nellore.</h1>
+                        <p class="lead">
+                            A modern hub for bookings, home services, retail shopping, and local deliveries — built for Nellore’s families and businesses.
+                        </p>
+                        <div class="hero-actions">
+                            <button class="btn primary">Explore Services</button>
+                            <button class="btn light">Browse Marketplace</button>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-number">100+</span>
-                            <span class="stat-label">Businesses</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">10K+</span>
-                            <span class="stat-label">Happy Customers</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">4.8</span>
-                            <span class="stat-label">Average Rating</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-grid">
-                    <div class="footer-brand">
-                        <div class="brand">
-                            <span class="brand-mark">IL</span>
-                            <div class="brand-text">
-                                <strong>iLoveSPSR Nellore</strong>
-                                <small>Services • Marketplace</small>
+                        <div class="hero-stats">
+                            <div>
+                                <h3 class="stat" data-count="1200">0</h3>
+                                <p>Local Businesses</p>
+                            </div>
+                            <div>
+                                <h3 class="stat" data-count="24000">0</h3>
+                                <p>Monthly Orders</p>
+                            </div>
+                            <div>
+                                <h3 class="stat" data-count="4.8">0</h3>
+                                <p>Average Rating</p>
                             </div>
                         </div>
-                        <p>Your trusted local platform for services and shopping in SPSR Nellore.</p>
-                        <div class="social-links">
-                            <a href="https://instagram.com/ilovespsrnellore" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-header">
+                            <div>
+                                <h4>Today in Nellore</h4>
+                                <p>Fast bookings • Safe payments • Verified pros</p>
+                            </div>
+                            <span class="badge">New</span>
+                        </div>
+                        <div class="hero-card-body">
+                            <div class="mini-service">
+                                <i class="fa-solid fa-screwdriver-wrench"></i>
+                                <div>
+                                    <strong>Home & Repair</strong>
+                                    <span>Electrician, Plumber, Cleaning</span>
+                                </div>
+                                <span class="mini-pill">30 min</span>
+                            </div>
+                            <div class="mini-service">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                                <div>
+                                    <strong>Local Marketplace</strong>
+                                    <span>Groceries, Fashion, Electronics</span>
+                                </div>
+                                <span class="mini-pill">Same day</span>
+                            </div>
+                            <div class="mini-service">
+                                <i class="fa-solid fa-truck-fast"></i>
+                                <div>
+                                    <strong>Hyperlocal Delivery</strong>
+                                    <span>1-hour delivery in town</span>
+                                </div>
+                                <span class="mini-pill">₹39+</span>
+                            </div>
+                        </div>
+                        <div class="hero-card-footer">
+                            <button class="btn primary full">Get Started</button>
                         </div>
                     </div>
-                    <div class="footer-links">
-                        <h4>Quick Links</h4>
-                        <a href="#services">Services</a>
-                        <a href="#products">Products</a>
-                        <a href="#about">About Us</a>
+                </div>
+            </section>
+
+            <!-- Deep Research Section -->
+            <section class="section research-section" id="research">
+                <div class="container">
+                    <div class="section-header">
+                        <h2><i class="fa-solid fa-magnifying-glass-chart"></i> AI-Powered Deep Research</h2>
+                        <p>Find exactly what you need with intelligent search and insights powered by data analytics.</p>
                     </div>
-                    <div class="footer-links">
-                        <h4>Support</h4>
-                        <a href="#">Help Center</a>
-                        <a href="#">Contact Us</a>
-                        <a href="#">Terms of Service</a>
-                    </div>
-                    <div class="footer-contact">
-                        <h4>Contact</h4>
-                        <p><i class="fa-solid fa-envelope"></i> hello@ilovespsrnellore.com</p>
-                        <p><i class="fa-solid fa-phone"></i> +91 9876543210</p>
-                        <p><i class="fa-solid fa-location-dot"></i> Nellore, AP 524001</p>
+                    
+                    <div class="research-container">
+                        <div class="research-tabs">
+                            <button class="tab-btn active" data-tab="services">
+                                <i class="fa-solid fa-screwdriver-wrench"></i> Services
+                            </button>
+                            <button class="tab-btn" data-tab="products">
+                                <i class="fa-solid fa-shopping-cart"></i> Products
+                            </button>
+                            <button class="tab-btn" data-tab="compare">
+                                <i class="fa-solid fa-code-compare"></i> Compare
+                            </button>
+                        </div>
+
+                        <!-- Services Research Tab -->
+                        <div class="research-tab-content active" id="tab-services">
+                            <div class="research-form">
+                                <h3>Smart Service Discovery</h3>
+                                <div class="form-group">
+                                    <label>What service do you need?</label>
+                                    <input type="text" id="service-query" placeholder="E.g., electrician, plumber, cleaning..." class="form-input">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Maximum Budget (₹)</label>
+                                        <input type="number" id="service-budget" placeholder="Optional" class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Location Preference</label>
+                                        <input type="text" id="service-location" placeholder="Optional" class="form-input">
+                                    </div>
+                                </div>
+                                <button class="btn primary" id="research-services-btn">
+                                    <i class="fa-solid fa-robot"></i> Start Deep Research
+                                </button>
+                            </div>
+                            <div id="services-results" class="research-results"></div>
+                        </div>
+
+                        <!-- Products Research Tab -->
+                        <div class="research-tab-content" id="tab-products">
+                            <div class="research-form">
+                                <h3>Smart Product Discovery</h3>
+                                <div class="form-group">
+                                    <label>What product are you looking for?</label>
+                                    <input type="text" id="product-query" placeholder="E.g., rice, saree, electronics..." class="form-input">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Min Price (₹)</label>
+                                        <input type="number" id="product-min-price" placeholder="Optional" class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max Price (₹)</label>
+                                        <input type="number" id="product-max-price" placeholder="Optional" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Minimum Rating</label>
+                                    <select id="product-min-rating" class="form-input">
+                                        <option value="">Any Rating</option>
+                                        <option value="4.5">4.5★ and above</option>
+                                        <option value="4.0">4.0★ and above</option>
+                                        <option value="3.5">3.5★ and above</option>
+                                    </select>
+                                </div>
+                                <button class="btn primary" id="research-products-btn">
+                                    <i class="fa-solid fa-robot"></i> Start Deep Research
+                                </button>
+                            </div>
+                            <div id="products-results" class="research-results"></div>
+                        </div>
+
+                        <!-- Compare Tab -->
+                        <div class="research-tab-content" id="tab-compare">
+                            <div class="research-form">
+                                <h3>Compare Services or Products</h3>
+                                <p class="help-text">Select 2-5 items to compare side by side with AI-powered insights.</p>
+                                <div class="form-group">
+                                    <label>Comparison Type</label>
+                                    <select id="compare-type" class="form-input">
+                                        <option value="services">Services</option>
+                                        <option value="products">Products</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Item IDs (comma-separated)</label>
+                                    <input type="text" id="compare-ids" placeholder="E.g., 1,2,3" class="form-input">
+                                    <small>Enter 2-5 item IDs separated by commas</small>
+                                </div>
+                                <button class="btn primary" id="compare-btn">
+                                    <i class="fa-solid fa-balance-scale"></i> Compare Now
+                                </button>
+                            </div>
+                            <div id="compare-results" class="research-results"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2026 iLoveSPSR Nellore. All rights reserved.</p>
+            </section>
+
+            <section class="section" id="services">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Essential Services, Delivered Right</h2>
+                        <p>Book trusted professionals across home, personal care, and business needs.</p>
+                    </div>
+                    <div class="grid cards-4">
+                        <article class="card">
+                            <i class="fa-solid fa-plug-circle-bolt"></i>
+                            <h3>Home Services</h3>
+                            <p>Electrician, plumber, AC repair, carpentry, appliance installation.</p>
+                            <a class="link" href="#">Explore</a>
+                        </article>
+                        <article class="card">
+                            <i class="fa-solid fa-spa"></i>
+                            <h3>Personal Care</h3>
+                            <p>Salon at home, wellness, fitness trainers, makeup, grooming.</p>
+                            <a class="link" href="#">Explore</a>
+                        </article>
+                        <article class="card">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <h3>Business Support</h3>
+                            <p>Digital marketing, accounting, legal help, staffing, IT services.</p>
+                            <a class="link" href="#">Explore</a>
+                        </article>
+                        <article class="card">
+                            <i class="fa-solid fa-house-lock"></i>
+                            <h3>Safety & Security</h3>
+                            <p>CCTV, smart locks, fire safety, maintenance contracts.</p>
+                            <a class="link" href="#">Explore</a>
+                        </article>
+                    </div>
                 </div>
+            </section>
+
+            <section class="section alt" id="market">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Local Marketplace</h2>
+                        <p>Discover curated products from Nellore’s best sellers and stores.</p>
+                    </div>
+                    <div class="grid cards-3">
+                        <article class="product">
+                            <div class="product-tag">Best Seller</div>
+                            <h3>Fresh Nellore Masuri Rice</h3>
+                            <p>5kg • Direct from farmers</p>
+                            <div class="product-footer">
+                                <span class="price">₹399</span>
+                                <button class="btn ghost">Add to Cart</button>
+                            </div>
+                        </article>
+                        <article class="product">
+                            <div class="product-tag">New</div>
+                            <h3>Coastal Spice Pack</h3>
+                            <p>Authentic masala blends</p>
+                            <div class="product-footer">
+                                <span class="price">₹249</span>
+                                <button class="btn ghost">Add to Cart</button>
+                            </div>
+                        </article>
+                        <article class="product">
+                            <div class="product-tag">Top Rated</div>
+                            <h3>Handloom Cotton Saree</h3>
+                            <p>Traditional weaves, modern colors</p>
+                            <div class="product-footer">
+                                <span class="price">₹1,499</span>
+                                <button class="btn ghost">Add to Cart</button>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="market-categories">
+                        <div class="category">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span>Groceries</span>
+                        </div>
+                        <div class="category">
+                            <i class="fa-solid fa-shirt"></i>
+                            <span>Fashion</span>
+                        </div>
+                        <div class="category">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                            <span>Electronics</span>
+                        </div>
+                        <div class="category">
+                            <i class="fa-solid fa-seedling"></i>
+                            <span>Organic</span>
+                        </div>
+                        <div class="category">
+                            <i class="fa-solid fa-gift"></i>
+                            <span>Gifts</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="business">
+                <div class="container split">
+                    <div>
+                        <h2>Grow Your Business in Nellore</h2>
+                        <p>Join the platform to reach local customers, accept payments, and manage orders with ease.</p>
+                        <ul class="feature-list">
+                            <li><i class="fa-solid fa-circle-check"></i> Verified leads and bookings</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Online store in minutes</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Delivery & logistics support</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Analytics and growth insights</li>
+                        </ul>
+                        <div class="hero-actions">
+                            <button class="btn primary">Become a Partner</button>
+                            <button class="btn ghost">View Pricing</button>
+                        </div>
+                    </div>
+                    <div class="steps">
+                        <div class="step">
+                            <span>01</span>
+                            <div>
+                                <h4>Register</h4>
+                                <p>Quick KYC & profile setup.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span>02</span>
+                            <div>
+                                <h4>List Services or Products</h4>
+                                <p>Add offerings, pricing, and availability.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span>03</span>
+                            <div>
+                                <h4>Start Selling</h4>
+                                <p>Accept bookings and orders instantly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section alt" id="testimonials">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Trusted by Nellore</h2>
+                        <p>Real feedback from customers and local businesses.</p>
+                    </div>
+                    <div class="grid cards-3">
+                        <article class="quote">
+                            <p>“Booked an AC service in 30 minutes. Seamless and professional.”</p>
+                            <strong>Ramesh, Magunta Layout</strong>
+                        </article>
+                        <article class="quote">
+                            <p>“Our boutique store saw 3x sales after listing here.”</p>
+                            <strong>Lavanya, Stonehousepet</strong>
+                        </article>
+                        <article class="quote">
+                            <p>“Love the quick delivery. Everything I need is local now.”</p>
+                            <strong>Saritha, Dargamitta</strong>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cta" id="contact">
+                <div class="container cta-inner">
+                    <div>
+                        <h2>Ready to experience Nellore’s digital marketplace?</h2>
+                        <p>Connect with us to onboard your business or get custom solutions.</p>
+                    </div>
+                    <div class="cta-actions">
+                        <button class="btn light">Contact Sales</button>
+                        <button class="btn primary">Join Now</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container footer-grid">
+                <div>
+                    <h3>iLoveSPSR Nellore</h3>
+                    <p>Bringing local services and commerce into one trusted platform.</p>
+                </div>
+                <div>
+                    <h4>Platform</h4>
+                    <a href="#services">Services</a>
+                    <a href="#market">Marketplace</a>
+                    <a href="#business">Business</a>
+                </div>
+                <div>
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Privacy</a>
+                </div>
+                <div>
+                    <h4>Follow</h4>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/i_love_spsr_nellore/" target="_blank" aria-label="Instagram" class="social">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="container footer-bottom">
+                <span>© 2026 iLoveSPSR Nellore. All rights reserved.</span>
+                <span>Built for Nellore businesses.</span>
             </div>
         </footer>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
