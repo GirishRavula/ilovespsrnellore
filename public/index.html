@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iLoveSPSR Nellore | Services & Marketplace</title>
+    <meta name="description" content="Book local services and shop products in SPSR Nellore - Home services, repairs, food delivery, and more.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="authModalTitle">Login</h2>
+                <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Register</button>
+            </div>
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-submit">Login</button>
+                <p class="form-footer">Demo: priya@gmail.com / customer123</p>
+            </form>
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="regPhone" placeholder="9876543210" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Min 6 characters" required minlength="6">
+                </div>
+                <button type="submit" class="btn-submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <button class="modal-close" onclick="closeCart()">&times;</button>
+        </div>
+        <div id="cartBody" class="cart-body">
+            <div class="cart-empty">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal" class="cart-total-amount">₹0</span>
+            </div>
+            <button class="btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal-overlay">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h2>Checkout</h2>
+                <button class="modal-close" onclick="closeCheckout()">&times;</button>
+            </div>
+            <div id="checkoutContent">
+                <!-- Checkout content will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+
+    <div class="page">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="container topbar-inner">
+                <span><i class="fa-solid fa-location-dot"></i> SPSR Nellore, Andhra Pradesh</span>
+                <span class="topbar-divider">|</span>
+                <span><i class="fa-solid fa-circle-check"></i> Verified Local Services</span>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="site-header">
+            <div class="container nav">
+                <a class="brand" href="#">
+                    <span class="brand-mark">IL</span>
+                    <div class="brand-text">
+                        <strong>iLoveSPSR Nellore</strong>
+                        <small>Services • Marketplace</small>
+                    </div>
+                </a>
+                <nav class="nav-links">
+                    <a href="#services">Services</a>
+                    <a href="#products">Products</a>
+                    <a href="#about">About</a>
+                </nav>
+                <div class="nav-actions" id="navActions">
+                    <!-- Auth buttons (shown when logged out) -->
+                    <div id="authButtons">
+                        <button class="btn ghost" onclick="showAuthModal('login')">Login</button>
+                        <button class="btn primary" onclick="showAuthModal('register')">Sign Up</button>
+                    </div>
+                    <!-- User menu (shown when logged in) -->
+                    <div id="userMenu" class="user-menu" style="display:none;">
+                        <button class="btn icon cart-btn" onclick="showCart()">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span id="cartBadge" class="cart-badge">0</span>
+                        </button>
+                        <div class="user-avatar" onclick="toggleUserDropdown()">
+                            <span id="userInitials">U</span>
+                        </div>
+                        <div id="userDropdown" class="user-dropdown">
+                            <div class="user-dropdown-header">
+                                <span id="userName">User</span>
+                                <small id="userEmail">user@email.com</small>
+                            </div>
+                            <div class="user-dropdown-divider"></div>
+                            <a class="user-dropdown-item" href="#orders"><i class="fa-solid fa-box"></i> My Orders</a>
+                            <a class="user-dropdown-item" href="#profile"><i class="fa-solid fa-user"></i> Profile</a>
+                            <div class="user-dropdown-divider"></div>
+                            <button class="user-dropdown-item" onclick="handleLogout()"><i class="fa-solid fa-sign-out-alt"></i> Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <span class="pill"><i class="fa-solid fa-bolt"></i> Local Services Platform</span>
+                    <h1>Book Services & Shop Local in Nellore</h1>
+                    <p class="lead">From home repairs to fresh groceries - find trusted services and products from verified local businesses.</p>
+                    <div class="hero-actions">
+                        <a href="#services" class="btn primary lg">Browse Services</a>
+                        <a href="#products" class="btn outline lg">Shop Products</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <i class="fa-solid fa-home"></i>
+                        <span>Home Services</span>
+                    </div>
+                    <div class="hero-card">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Food & Groceries</span>
+                    </div>
+                    <div class="hero-card">
+                        <i class="fa-solid fa-spa"></i>
+                        <span>Personal Care</span>
+                    </div>
+                    <div class="hero-card">
+                        <i class="fa-solid fa-truck"></i>
+                        <span>Fast Delivery</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="section" id="services">
+            <div class="container">
+                <div class="section-header">
+                    <span class="pill">Our Services</span>
+                    <h2>What We Offer</h2>
+                    <p>Professional services delivered by verified local experts</p>
+                </div>
+                <div id="servicesGrid" class="services-grid">
+                    <!-- Services loaded dynamically -->
+                    <div class="loading"><div class="loading-spinner"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="section section-alt" id="products">
+            <div class="container">
+                <div class="section-header">
+                    <span class="pill">Marketplace</span>
+                    <h2>Shop Local Products</h2>
+                    <p>Fresh groceries, handloom, electronics and more from Nellore</p>
+                </div>
+                <div id="productsGrid" class="products-grid">
+                    <!-- Products loaded dynamically -->
+                    <div class="loading"><div class="loading-spinner"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-content">
+                        <span class="pill">About Us</span>
+                        <h2>Built for Nellore, by Nellore</h2>
+                        <p>iLoveSPSR Nellore is a local platform connecting customers with trusted service providers and businesses in the SPSR Nellore district.</p>
+                        <ul class="about-features">
+                            <li><i class="fa-solid fa-check-circle"></i> Verified local businesses</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Secure online payments</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Fast doorstep delivery</li>
+                            <li><i class="fa-solid fa-check-circle"></i> 24/7 customer support</li>
+                        </ul>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">Services</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">100+</span>
+                            <span class="stat-label">Businesses</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Happy Customers</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">4.8</span>
+                            <span class="stat-label">Average Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <div class="brand">
+                            <span class="brand-mark">IL</span>
+                            <div class="brand-text">
+                                <strong>iLoveSPSR Nellore</strong>
+                                <small>Services • Marketplace</small>
+                            </div>
+                        </div>
+                        <p>Your trusted local platform for services and shopping in SPSR Nellore.</p>
+                        <div class="social-links">
+                            <a href="https://instagram.com/ilovespsrnellore" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <a href="#services">Services</a>
+                        <a href="#products">Products</a>
+                        <a href="#about">About Us</a>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Support</h4>
+                        <a href="#">Help Center</a>
+                        <a href="#">Contact Us</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
+                    <div class="footer-contact">
+                        <h4>Contact</h4>
+                        <p><i class="fa-solid fa-envelope"></i> hello@ilovespsrnellore.com</p>
+                        <p><i class="fa-solid fa-phone"></i> +91 9876543210</p>
+                        <p><i class="fa-solid fa-location-dot"></i> Nellore, AP 524001</p>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 iLoveSPSR Nellore. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

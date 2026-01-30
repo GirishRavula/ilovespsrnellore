@@ -1,0 +1,50 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ilovespsr-nellore
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - JWT_SECRET=${JWT_SECRET:-super-secure-jwt-secret-for-local-testing}
+      - DB_PATH=/app/data/ilovespsr.db
+    volumes:
+      # Persist SQLite database
+      - sqlite-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Development service with hot reload
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: ilovespsr-nellore-dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - JWT_SECRET=dev-jwt-secret
+      - DB_PATH=/app/data/ilovespsr.db
+    volumes:
+      - ./server:/app/server
+      - ./public:/app/public
+      - sqlite-data-dev:/app/data
+    profiles:
+      - dev
+    restart: unless-stopped
+
+volumes:
+  sqlite-data:
+    driver: local
+  sqlite-data-dev:
+    driver: local

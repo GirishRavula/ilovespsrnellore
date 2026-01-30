@@ -1,0 +1,712 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap');
+
+* {
+ /* Removed flashy fireworks - keeping only gentle diyas */ 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Noto Sans Telugu', sans-serif;
+    background: linear-gradient(135deg, 
+        #2C1810 0%,     /* Dark Brown */
+        #8B4513 20%,    /* Saddle Brown */
+        #CD853F 40%,    /* Peru */
+        #DEB887 60%,    /* Burlywood */
+        #F4A460 80%,    /* Sandy Brown */
+        #FFE4B5 100%);  /* Moccasin */
+    background-size: 100% 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+@keyframes rainbowShift {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 50% 0%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 100%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #ffc107; /* A warm, inviting color */
+}
+
+main h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+main .main-heading {
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+main p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.countdown div {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 100px;
+}
+
+.countdown span {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.countdown .label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 5px;
+}
+
+footer p {
+    margin-bottom: 15px;
+}
+
+.social-links a {
+    color: #fff;
+    font-size: 1.8rem;
+    margin: 0 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #ffc107;
+    transform: scale(1.2);
+}
+
+/* Diwali Diya Animations */
+.diwali-diyas {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.diya {
+    position: absolute;
+    font-size: 2rem;
+    animation: flicker 2s ease-in-out infinite alternate;
+}
+
+.diya-1 { top: 8%; left: 8%; animation-delay: 0s; }
+.diya-2 { top: 12%; right: 12%; animation-delay: 0.7s; }
+.diya-3 { top: 50%; left: 3%; animation-delay: 1.4s; }
+.diya-4 { top: 65%; right: 8%; animation-delay: 2.1s; }
+.diya-5 { bottom: 18%; left: 15%; animation-delay: 2.8s; }
+.diya-6 { bottom: 12%; right: 20%; animation-delay: 3.5s; }
+.diya-7 { top: 35%; right: 5%; animation-delay: 4.2s; }
+.diya-8 { top: 80%; left: 50%; animation-delay: 4.9s; }
+
+@keyframes flicker {
+    0% { 
+        transform: scale(1) rotate(-1deg);
+        filter: brightness(1) drop-shadow(0 0 8px #FFD700);
+    }
+    50% { 
+        transform: scale(1.05) rotate(1deg);
+        filter: brightness(1.1) drop-shadow(0 0 12px #FFA500);
+    }
+    100% { 
+        transform: scale(1) rotate(-1deg);
+        filter: brightness(1) drop-shadow(0 0 8px #FFD700);
+    }
+}
+
+/* Cracker Burst Animations */
+.fireworks {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.firework {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+/* Clean, eye-friendly design without flashy animations */
+
+@keyframes crackerBurst2 {
+    0% { 
+        transform: scale(0) rotate(0deg); 
+        background: #4ECDC4; 
+        filter: brightness(2.5);
+    }
+    10% { transform: scale(1) rotate(45deg); background: #FF9FF3; }
+    20% { 
+        transform: scale(18) rotate(90deg);
+        background: transparent;
+        box-shadow: 
+            -55px 0 0 4px #4ECDC4,
+            55px 0 0 4px #FF6B6B,
+            0 -55px 0 4px #FECA57,
+            0 55px 0 4px #96CEB4,
+            -39px -39px 0 3px #45B7D1,
+            39px -39px 0 3px #FF9FF3,
+            -39px 39px 0 3px #54A0FF,
+            39px 39px 0 3px #5F27CD,
+            -75px -20px 0 2px #4ECDC4,
+            75px -20px 0 2px #FF6B6B,
+            -20px -75px 0 2px #FECA57,
+            20px 75px 0 2px #96CEB4;
+        filter: brightness(1.6) saturate(1.8);
+    }
+    40% {
+        transform: scale(28) rotate(180deg);
+        box-shadow: 
+            -55px 0 0 2px #4ECDC4,
+            55px 0 0 2px #FF6B6B,
+            0 -55px 0 2px #FECA57,
+            0 55px 0 2px #96CEB4,
+            -39px -39px 0 1px #45B7D1,
+            39px -39px 0 1px #FF9FF3,
+            -39px 39px 0 1px #54A0FF,
+            39px 39px 0 1px #5F27CD,
+            -75px -20px 0 1px #4ECDC4,
+            75px -20px 0 1px #FF6B6B,
+            -20px -75px 0 1px #FECA57,
+            20px 75px 0 1px #96CEB4;
+    }
+    100% { 
+        transform: scale(40) rotate(360deg);
+        background: transparent;
+        box-shadow: 
+            -55px 0 0 0px transparent,
+            55px 0 0 0px transparent,
+            0 -55px 0 0px transparent,
+            0 55px 0 0px transparent,
+            -39px -39px 0 0px transparent,
+            39px -39px 0 0px transparent,
+            -39px 39px 0 0px transparent,
+            39px 39px 0 0px transparent,
+            -75px -20px 0 0px transparent,
+            75px -20px 0 0px transparent,
+            -20px -75px 0 0px transparent,
+            20px 75px 0 0px transparent;
+    }
+}
+
+@keyframes crackerBurst3 {
+    0% { 
+        transform: scale(0); 
+        background: radial-gradient(circle, #FECA57, #FF9FF3); 
+        border-radius: 50%;
+        filter: brightness(3) blur(1px);
+    }
+    8% { 
+        transform: scale(2); 
+        background: radial-gradient(circle, #54A0FF, #5F27CD);
+        filter: brightness(2.5) blur(0px);
+    }
+    15% { 
+        transform: scale(22);
+        background: transparent;
+        box-shadow: 
+            /* Inner ring */
+            -45px 0 0 5px #FECA57,
+            45px 0 0 5px #FF6B6B,
+            0 -45px 0 5px #4ECDC4,
+            0 45px 0 5px #96CEB4,
+            -32px -32px 0 4px #45B7D1,
+            32px -32px 0 4px #FF9FF3,
+            -32px 32px 0 4px #54A0FF,
+            32px 32px 0 4px #5F27CD,
+            /* Middle ring */
+            -65px 0 0 3px #FF6B6B,
+            65px 0 0 3px #4ECDC4,
+            0 -65px 0 3px #FECA57,
+            0 65px 0 3px #45B7D1,
+            -46px -46px 0 3px #96CEB4,
+            46px -46px 0 3px #FF9FF3,
+            -46px 46px 0 3px #54A0FF,
+            46px 46px 0 3px #5F27CD,
+            /* Outer ring */
+            -85px 0 0 2px #4ECDC4,
+            85px 0 0 2px #FECA57,
+            0 -85px 0 2px #FF9FF3,
+            0 85px 0 2px #FF6B6B,
+            -60px -60px 0 2px #45B7D1,
+            60px -60px 0 2px #96CEB4,
+            -60px 60px 0 2px #54A0FF,
+            60px 60px 0 2px #5F27CD;
+        filter: brightness(1.8) saturate(2);
+    }
+    35% {
+        transform: scale(35);
+        box-shadow: 
+            -45px 0 0 2px #FECA57,
+            45px 0 0 2px #FF6B6B,
+            0 -45px 0 2px #4ECDC4,
+            0 45px 0 2px #96CEB4,
+            -32px -32px 0 2px #45B7D1,
+            32px -32px 0 2px #FF9FF3,
+            -32px 32px 0 2px #54A0FF,
+            32px 32px 0 2px #5F27CD,
+            -65px 0 0 1px #FF6B6B,
+            65px 0 0 1px #4ECDC4,
+            0 -65px 0 1px #FECA57,
+            0 65px 0 1px #45B7D1,
+            -46px -46px 0 1px #96CEB4,
+            46px -46px 0 1px #FF9FF3,
+            -46px 46px 0 1px #54A0FF,
+            46px 46px 0 1px #5F27CD,
+            -85px 0 0 1px #4ECDC4,
+            85px 0 0 1px #FECA57,
+            0 -85px 0 1px #FF9FF3,
+            0 85px 0 1px #FF6B6B,
+            -60px -60px 0 1px #45B7D1,
+            60px -60px 0 1px #96CEB4,
+            -60px 60px 0 1px #54A0FF,
+            60px 60px 0 1px #5F27CD;
+    }
+    100% { 
+        transform: scale(55);
+        background: transparent;
+        box-shadow: 
+            -45px 0 0 0px transparent, 45px 0 0 0px transparent,
+            0 -45px 0 0px transparent, 0 45px 0 0px transparent,
+            -32px -32px 0 0px transparent, 32px -32px 0 0px transparent,
+            -32px 32px 0 0px transparent, 32px 32px 0 0px transparent,
+            -65px 0 0 0px transparent, 65px 0 0 0px transparent,
+            0 -65px 0 0px transparent, 0 65px 0 0px transparent,
+            -46px -46px 0 0px transparent, 46px -46px 0 0px transparent,
+            -46px 46px 0 0px transparent, 46px 46px 0 0px transparent,
+            -85px 0 0 0px transparent, 85px 0 0 0px transparent,
+            0 -85px 0 0px transparent, 0 85px 0 0px transparent,
+            -60px -60px 0 0px transparent, 60px -60px 0 0px transparent,
+            -60px 60px 0 0px transparent, 60px 60px 0 0px transparent;
+        filter: brightness(1) saturate(1);
+    }
+}
+
+/* Floating Elements */
+.floating-elements {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.float-element {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: float 6s ease-in-out infinite;
+}
+
+.lotus { top: 25%; left: 80%; animation-delay: 0s; }
+.peacock { top: 55%; left: 90%; animation-delay: 1s; }
+.temple { top: 75%; left: 85%; animation-delay: 2s; }
+.rice { top: 45%; left: 5%; animation-delay: 3s; }
+.rangoli { top: 85%; left: 15%; animation-delay: 4s; }
+.conch { top: 35%; left: 8%; animation-delay: 5s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    margin-bottom: 30px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.title-section {
+    margin-bottom: 30px;
+}
+
+.main-title-telugu {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+    animation: gentleGlow 3s ease-in-out infinite alternate;
+}
+
+.main-title-english {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+}
+
+.tagline-telugu {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    font-size: 1.3rem;
+    color: #FFE4B5;
+    margin-bottom: 10px;
+}
+
+.tagline-english {
+    font-size: 1.1rem;
+    color: #F0E68C;
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+@keyframes gentleGlow {
+    0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px #FFD700; }
+    100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px #FFD700; }
+}
+
+@keyframes textRainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Cultural Showcase */
+.cultural-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.culture-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.culture-item:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #FFD700;
+}
+
+.culture-item .icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.culture-item .text {
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Coming Soon Section */
+.coming-soon-section {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 140, 83, 0.3);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.diwali-greeting {
+    margin-bottom: 30px;
+}
+
+.diwali-text {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    font-size: 2rem;
+    color: #FFD700;
+    margin-bottom: 10px;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+.diwali-english {
+    font-size: 1.5rem;
+    color: #FF8E53;
+    font-style: italic;
+}
+
+@keyframes sparkle {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.05); filter: brightness(1.2); }
+}
+
+.coming-soon-content {
+    margin-top: 30px;
+}
+
+.coming-soon-title {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin-bottom: 10px;
+}
+
+.coming-soon-english {
+    font-size: 2rem;
+    color: #FFFFFF;
+    font-weight: 600;
+    letter-spacing: 5px;
+    margin-bottom: 30px;
+}
+
+.description {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    font-size: 1.2rem;
+    color: #FFE4B5;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.description-english {
+    font-size: 1.1rem;
+    color: #F0E68C;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Heritage Section */
+.heritage-section {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(230, 57, 70, 0.3);
+    margin-bottom: 30px;
+}
+
+.heritage-title {
+    font-size: 2.5rem;
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.heritage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.heritage-item {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 210, 63, 0.2));
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.heritage-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+    border-color: #FFD700;
+}
+
+.heritage-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.heritage-item h4 {
+    font-size: 1.3rem;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.heritage-item .telugu {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    font-size: 1.1rem;
+    color: #FFD700;
+    margin-bottom: 10px;
+}
+
+.heritage-item .desc {
+    font-size: 0.95rem;
+    color: #FFE4B5;
+    line-height: 1.4;
+}
+
+/* Footer */
+.festival-footer {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 107, 53, 0.3);
+    text-align: center;
+}
+
+.diwali-wishes {
+    margin-bottom: 25px;
+}
+
+.diwali-message {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    font-size: 1.3rem;
+    color: #FFD700;
+    margin-bottom: 10px;
+}
+
+.diwali-english {
+    font-size: 1.1rem;
+    color: #FF8E53;
+    font-style: italic;
+}
+
+.social-section {
+    margin-top: 20px;
+}
+
+.follow-text {
+    font-size: 1rem;
+    color: #FFE4B5;
+    margin-bottom: 15px;
+}
+
+.social-links {
+    margin: 20px 0;
+}
+
+.social-instagram {
+    display: inline-block;
+    padding: 15px;
+    background: linear-gradient(135deg, #E4405F, #C13584, #833AB4);
+    color: white;
+    border-radius: 50%;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.social-instagram:hover {
+    transform: scale(1.2) rotate(15deg);
+    box-shadow: 0 10px 20px rgba(228, 64, 95, 0.5);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(228, 64, 95, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(228, 64, 95, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(228, 64, 95, 0); }
+}
+
+.blessing {
+    font-size: 1rem;
+    color: #FFD700;
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px;
+    }
+    header h1 {
+        font-size: 2rem;
+    }
+    main .main-heading {
+        font-size: 2.8rem;
+    }
+    .countdown {
+        gap: 10px;
+    }
+    .countdown div {
+        padding: 15px;
+        min-width: 70px;
+    }
+    .countdown span {
+        font-size: 2rem;
+    }
+    .main-title-telugu {
+        font-size: 2.5rem;
+    }
+    .main-title-english {
+        font-size: 1.8rem;
+    }
+    .coming-soon-title {
+        font-size: 2.5rem;
+    }
+    .coming-soon-english {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
+    .heritage-grid {
+        grid-template-columns: 1fr;
+    }
+    .cultural-showcase {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .diya {
+        font-size: 1.5rem;
+    }
+    .float-element {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    .hero-section, .coming-soon-section, .heritage-section, .festival-footer {
+        padding: 20px;
+    }
+    .main-title-telugu {
+        font-size: 2rem;
+    }
+    .cultural-showcase {
+        grid-template-columns: 1fr;
+    }
+}
