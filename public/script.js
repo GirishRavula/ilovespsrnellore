@@ -1,461 +1,286 @@
-// iLoveSPSR Nellore - Frontend Application
-const API = '/api';
-
-// State
-const state = {
-    user: null,
-    token: localStorage.getItem('token'),
-    cart: []
-};
-
-// Initialize
-document.addEventListener('DOMContentLoaded', async () => {
-    if (state.token) {
-        await loadProfile();
-    }
-    loadServices();
-    loadProducts();
-    updateUI();
-});
-
-// API Helper
-async function api(endpoint, options = {}) {
-    const headers = { 'Content-Type': 'application/json', ...options.headers };
-    if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
-    
-    const res = await fetch(`${API}${endpoint}`, { ...options, headers });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Request failed');
-    return data;
-}
-
-// Auth Functions
-async function loadProfile() {
-    try {
-        const data = await api('/auth/me');
-        state.user = data.user;
-        await loadCart();
-    } catch (e) {
-        logout();
-    }
-}
-
-async function handleLogin(e) {
-    e.preventDefault();
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    try {
-        const data = await api('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({ email, password })
+document.addEventListener('DOMContentLoaded', () => {
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    if (toggle && navLinks) {
+        toggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
         });
-        state.token = data.token;
-        state.user = data.user;
-        localStorage.setItem('token', data.token);
-        closeAuthModal();
-        await loadCart();
-        updateUI();
-        showToast('Welcome back, ' + data.user.name + '!', 'success');
-    } catch (e) {
-        showToast(e.message, 'error');
     }
-}
 
-async function handleRegister(e) {
-    e.preventDefault();
-    const name = document.getElementById('regName').value;
-    const email = document.getElementById('regEmail').value;
-    const phone = document.getElementById('regPhone').value;
-    const password = document.getElementById('regPassword').value;
-    
-    try {
-        const data = await api('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify({ name, email, phone, password, role: 'customer' })
+    // Animate stats on scroll
+    const stats = document.querySelectorAll('.stat');
+    const animateStat = (el) => {
+        const target = parseFloat(el.dataset.count);
+        const isDecimal = target % 1 !== 0;
+        let current = 0;
+        const step = Math.ceil(target / 60);
+        const tick = () => {
+            current += step;
+            if (current >= target) {
+                el.textContent = isDecimal ? target.toFixed(1) : target.toLocaleString();
+            } else {
+                el.textContent = isDecimal ? current.toFixed(1) : current.toLocaleString();
+                requestAnimationFrame(tick);
+            }
+        };
+        tick();
+    };
+    const observer = new IntersectionObserver((entries, ob) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                animateStat(entry.target);
+                ob.unobserve(entry.target);
+            }
         });
-        state.token = data.token;
-        state.user = data.user;
-        localStorage.setItem('token', data.token);
-        closeAuthModal();
-        updateUI();
-        showToast('Account created! Welcome, ' + data.user.name, 'success');
-    } catch (e) {
-        showToast(e.message, 'error');
-    }
-}
+    }, { threshold: 0.5 });
+    stats.forEach((stat) => observer.observe(stat));
 
-function handleLogout() {
-    logout();
-    showToast('Logged out successfully', 'info');
-}
+    // Deep Research Feature - Tab Switching
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.research-tab-content');
 
-function logout() {
-    state.token = null;
-    state.user = null;
-    state.cart = [];
-    localStorage.removeItem('token');
-    updateUI();
-}
-
-// Cart Functions
-async function loadCart() {
-    if (!state.token) return;
-    try {
-        const data = await api('/orders/cart');
-        state.cart = data.cart || [];
-        updateCartBadge();
-    } catch (e) {
-        console.error('Failed to load cart:', e);
-    }
-}
-
-async function addToCart(type, itemId, name, price) {
-    if (!state.token) {
-        showAuthModal('login');
-        showToast('Please login to add items to cart', 'info');
-        return;
-    }
-    
-    try {
-        await api('/orders/cart', {
-            method: 'POST',
-            body: JSON.stringify({ item_type: type, item_id: itemId, quantity: 1 })
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.dataset.tab;
+            
+            // Update active states
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            button.classList.add('active');
+            document.getElementById(`tab-${targetTab}`).classList.add('active');
         });
-        await loadCart();
-        showToast(`${name} added to cart!`, 'success');
-    } catch (e) {
-        showToast(e.message, 'error');
-    }
-}
+    });
 
-async function removeFromCart(cartItemId) {
-    try {
-        await api(`/orders/cart/${cartItemId}`, { method: 'DELETE' });
-        await loadCart();
-        renderCart();
-        showToast('Item removed from cart', 'info');
-    } catch (e) {
-        showToast(e.message, 'error');
-    }
-}
+    // Deep Research - Services
+    const researchServicesBtn = document.getElementById('research-services-btn');
+    if (researchServicesBtn) {
+        researchServicesBtn.addEventListener('click', async () => {
+            const query = document.getElementById('service-query').value;
+            const budget = document.getElementById('service-budget').value;
+            const location = document.getElementById('service-location').value;
 
-function updateCartBadge() {
-    const badge = document.getElementById('cartBadge');
-    if (badge) {
-        const count = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-        badge.textContent = count;
-    }
-}
+            if (!query) {
+                alert('Please enter a search query');
+                return;
+            }
 
-// Load Data
-async function loadServices() {
-    const grid = document.getElementById('servicesGrid');
-    try {
-        const data = await api('/services');
-        const services = data.services || [];
-        
-        if (services.length === 0) {
-            grid.innerHTML = '<p class="text-muted">No services available</p>';
+            const resultsDiv = document.getElementById('services-results');
+            resultsDiv.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><span>Researching services...</span></div>';
+
+            try {
+                const response = await fetch('/api/research/services', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, budget, location })
+                });
+
+                const data = await response.json();
+                displayServicesResults(data, resultsDiv);
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error-message">Failed to perform research. Please try again.</div>';
+            }
+        });
+    }
+
+    // Deep Research - Products
+    const researchProductsBtn = document.getElementById('research-products-btn');
+    if (researchProductsBtn) {
+        researchProductsBtn.addEventListener('click', async () => {
+            const query = document.getElementById('product-query').value;
+            const minPrice = document.getElementById('product-min-price').value;
+            const maxPrice = document.getElementById('product-max-price').value;
+            const minRating = document.getElementById('product-min-rating').value;
+
+            if (!query) {
+                alert('Please enter a search query');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('products-results');
+            resultsDiv.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><span>Researching products...</span></div>';
+
+            try {
+                const response = await fetch('/api/research/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        query, 
+                        min_price: minPrice, 
+                        max_price: maxPrice, 
+                        min_rating: minRating 
+                    })
+                });
+
+                const data = await response.json();
+                displayProductsResults(data, resultsDiv);
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error-message">Failed to perform research. Please try again.</div>';
+            }
+        });
+    }
+
+    // Compare Feature
+    const compareBtn = document.getElementById('compare-btn');
+    if (compareBtn) {
+        compareBtn.addEventListener('click', async () => {
+            const type = document.getElementById('compare-type').value;
+            const idsInput = document.getElementById('compare-ids').value;
+            const ids = idsInput.split(',').map(id => id.trim()).filter(id => id);
+
+            if (ids.length < 2) {
+                alert('Please enter at least 2 IDs to compare');
+                return;
+            }
+
+            if (ids.length > 5) {
+                alert('Maximum 5 items can be compared at once');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('compare-results');
+            resultsDiv.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><span>Comparing...</span></div>';
+
+            try {
+                const endpoint = type === 'services' ? '/api/research/compare/services' : '/api/research/compare/products';
+                const bodyKey = type === 'services' ? 'service_ids' : 'product_ids';
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ [bodyKey]: ids })
+                });
+
+                const data = await response.json();
+                displayComparisonResults(data, type, resultsDiv);
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error-message">Failed to compare. Please check the IDs and try again.</div>';
+            }
+        });
+    }
+
+    // Helper function to display services results
+    function displayServicesResults(data, container) {
+        if (!data.services || data.services.length === 0) {
+            container.innerHTML = '<div class="error-message">No services found matching your criteria.</div>';
             return;
         }
-        
-        const icons = {
-            'home-repair': 'fa-wrench',
-            'personal-care': 'fa-spa',
-            'education': 'fa-graduation-cap',
-            'healthcare': 'fa-heart-pulse',
-            'events': 'fa-calendar-star',
-            'transport': 'fa-car'
-        };
-        
-        grid.innerHTML = services.slice(0, 8).map(s => `
-            <div class="service-card">
-                <div class="card-icon">
-                    <i class="fa-solid ${icons[s.category_slug] || 'fa-concierge-bell'}"></i>
-                </div>
-                <h3 class="card-title">${s.name}</h3>
-                <p class="card-desc">${s.description || ''}</p>
-                <div class="card-meta">
-                    <span class="card-price">₹${s.price}</span>
-                    <span class="card-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.5'}</span>
-                </div>
-                <button class="btn-add-cart" onclick="addToCart('service', ${s.id}, '${s.name.replace(/'/g, "\\'")}', ${s.price})" style="margin-top: 16px; width: 100%;">
-                    <i class="fa-solid fa-plus"></i> Book Service
-                </button>
-            </div>
-        `).join('');
-    } catch (e) {
-        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Failed to load services</p>';
-    }
-}
 
-async function loadProducts() {
-    const grid = document.getElementById('productsGrid');
-    try {
-        const data = await api('/products');
-        const products = data.products || [];
-        
-        if (products.length === 0) {
-            grid.innerHTML = '<p class="text-muted">No products available</p>';
+        let html = '<div class="results-header">';
+        html += `<h3><i class="fa-solid fa-chart-line"></i> Research Results for "${data.query}"</h3>`;
+        html += '<div class="insights-grid">';
+        html += `<div class="insight-card"><div class="label">Total Found</div><div class="value">${data.insights.total_found}</div></div>`;
+        html += `<div class="insight-card"><div class="label">Avg Price</div><div class="value">₹${data.insights.avg_price.toFixed(0)}</div></div>`;
+        html += `<div class="insight-card"><div class="label">Avg Rating</div><div class="value">${data.insights.avg_rating.toFixed(1)}★</div></div>`;
+        html += `<div class="insight-card"><div class="label">Verified Vendors</div><div class="value">${data.insights.verified_vendors}</div></div>`;
+        html += '</div></div>';
+
+        if (data.insights.recommendations && data.insights.recommendations.length > 0) {
+            html += '<div class="recommendations-section"><h4>AI-Powered Recommendations</h4>';
+            data.insights.recommendations.forEach(rec => {
+                if (rec.services && rec.services.length > 0) {
+                    html += `<div class="recommendation-group"><h5><i class="fa-solid fa-star"></i> ${rec.title}</h5>`;
+                    html += '<div class="items-grid">';
+                    rec.services.forEach(service => {
+                        html += `<div class="result-item">`;
+                        html += `<h4>${service.name}</h4>`;
+                        html += `<div class="category">${service.category_name}</div>`;
+                        html += `<div class="price">₹${service.price}</div>`;
+                        html += `<div class="rating">★ ${service.rating} (${service.review_count} reviews)</div>`;
+                        html += `<div class="vendor">${service.vendor_name} ${service.vendor_verified ? '<span class="verified-badge">✓ Verified</span>' : ''}</div>`;
+                        html += `</div>`;
+                    });
+                    html += '</div></div>';
+                }
+            });
+            html += '</div>';
+        }
+
+        container.innerHTML = html;
+    }
+
+    // Helper function to display products results
+    function displayProductsResults(data, container) {
+        if (!data.products || data.products.length === 0) {
+            container.innerHTML = '<div class="error-message">No products found matching your criteria.</div>';
             return;
         }
+
+        let html = '<div class="results-header">';
+        html += `<h3><i class="fa-solid fa-chart-line"></i> Research Results for "${data.query}"</h3>`;
+        html += '<div class="insights-grid">';
+        html += `<div class="insight-card"><div class="label">Total Found</div><div class="value">${data.insights.total_found}</div></div>`;
+        html += `<div class="insight-card"><div class="label">Price Range</div><div class="value">₹${data.insights.price_range.min}-${data.insights.price_range.max}</div></div>`;
+        html += `<div class="insight-card"><div class="label">Avg Rating</div><div class="value">${data.insights.avg_rating.toFixed(1)}★</div></div>`;
+        html += `<div class="insight-card"><div class="label">Avg Discount</div><div class="value">${data.insights.avg_discount.toFixed(1)}%</div></div>`;
+        html += '</div></div>';
+
+        if (data.insights.recommendations && data.insights.recommendations.length > 0) {
+            html += '<div class="recommendations-section"><h4>AI-Powered Recommendations</h4>';
+            data.insights.recommendations.forEach(rec => {
+                if (rec.products && rec.products.length > 0) {
+                    html += `<div class="recommendation-group"><h5><i class="fa-solid fa-star"></i> ${rec.title}</h5>`;
+                    html += '<div class="items-grid">';
+                    rec.products.forEach(product => {
+                        html += `<div class="result-item">`;
+                        html += `<h4>${product.name}</h4>`;
+                        html += `<div class="category">${product.category_name}</div>`;
+                        html += `<div class="price">₹${product.price} ${product.discount_percent > 0 ? `<small style="text-decoration:line-through;color:var(--muted)">₹${product.mrp}</small>` : ''}</div>`;
+                        html += `<div class="rating">★ ${product.rating} (${product.review_count} reviews)</div>`;
+                        html += `<div class="vendor">${product.vendor_name} ${product.vendor_verified ? '<span class="verified-badge">✓ Verified</span>' : ''}</div>`;
+                        html += `</div>`;
+                    });
+                    html += '</div></div>';
+                }
+            });
+            html += '</div>';
+        }
+
+        container.innerHTML = html;
+    }
+
+    // Helper function to display comparison results
+    function displayComparisonResults(data, type, container) {
+        const items = type === 'services' ? data.services : data.products;
         
-        const icons = {
-            'groceries': 'fa-basket-shopping',
-            'handloom': 'fa-shirt',
-            'electronics': 'fa-mobile-screen',
-            'home-decor': 'fa-couch',
-            'gifts': 'fa-gift',
-            'health': 'fa-pills'
-        };
-        
-        grid.innerHTML = products.slice(0, 8).map(p => `
-            <div class="product-card">
-                <div class="card-icon">
-                    <i class="fa-solid ${icons[p.category_slug] || 'fa-box'}"></i>
-                </div>
-                <h3 class="card-title">${p.name}</h3>
-                <p class="card-desc">${p.description || ''}</p>
-                <div class="card-meta">
-                    <span class="card-price">₹${p.price}</span>
-                    <span class="card-rating"><i class="fa-solid fa-star"></i> ${p.rating || '4.5'}</span>
-                </div>
-                <button class="btn-add-cart" onclick="addToCart('product', ${p.id}, '${p.name.replace(/'/g, "\\'")}', ${p.price})" style="margin-top: 16px; width: 100%;">
-                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                </button>
-            </div>
-        `).join('');
-    } catch (e) {
-        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);">Failed to load products</p>';
-    }
-}
+        if (!items || items.length < 2) {
+            container.innerHTML = '<div class="error-message">Not enough items found for comparison.</div>';
+            return;
+        }
 
-// UI Functions
-function updateUI() {
-    const authButtons = document.getElementById('authButtons');
-    const userMenu = document.getElementById('userMenu');
-    
-    if (state.user) {
-        authButtons.style.display = 'none';
-        userMenu.style.display = 'flex';
-        document.getElementById('userInitials').textContent = state.user.name.charAt(0).toUpperCase();
-        document.getElementById('userName').textContent = state.user.name;
-        document.getElementById('userEmail').textContent = state.user.email;
-        updateCartBadge();
-    } else {
-        authButtons.style.display = 'flex';
-        userMenu.style.display = 'none';
-    }
-}
+        let html = '<div class="results-header">';
+        html += `<h3><i class="fa-solid fa-balance-scale"></i> Comparison Results</h3>`;
+        html += '<div class="insights-grid">';
+        html += `<div class="insight-card"><div class="label">Compared Items</div><div class="value">${items.length}</div></div>`;
+        html += `<div class="insight-card"><div class="label">Price Range</div><div class="value">₹${data.insights.price_comparison.lowest}-${data.insights.price_comparison.highest}</div></div>`;
+        html += `<div class="insight-card"><div class="label">Best Rating</div><div class="value">${data.insights.rating_comparison.best}★</div></div>`;
+        html += `<div class="insight-card"><div class="label">Total Reviews</div><div class="value">${data.insights.total_reviews}</div></div>`;
+        html += '</div></div>';
 
-// Auth Modal
-function showAuthModal(tab = 'login') {
-    document.getElementById('authModal').classList.add('active');
-    switchAuthTab(tab);
-}
+        if (data.recommendation) {
+            html += '<div class="recommendation-banner">';
+            html += '<h4><i class="fa-solid fa-trophy"></i> AI Recommendation</h4>';
+            html += `<p><strong>${data.recommendation.service_name || data.recommendation.product_name}</strong> - ${data.recommendation.reason}</p>`;
+            html += '</div>';
+        }
 
-function closeAuthModal() {
-    document.getElementById('authModal').classList.remove('active');
-    document.getElementById('loginForm').reset();
-    document.getElementById('registerForm').reset();
-}
-
-function switchAuthTab(tab) {
-    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-    
-    document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('active');
-    document.getElementById(tab === 'login' ? 'loginForm' : 'registerForm').classList.add('active');
-    document.getElementById('authModalTitle').textContent = tab === 'login' ? 'Login' : 'Create Account';
-}
-
-// Cart Sidebar
-function showCart() {
-    document.getElementById('cartSidebar').classList.add('active');
-    document.getElementById('cartOverlay').classList.add('active');
-    renderCart();
-}
-
-function closeCart() {
-    document.getElementById('cartSidebar').classList.remove('active');
-    document.getElementById('cartOverlay').classList.remove('active');
-}
-
-function renderCart() {
-    const body = document.getElementById('cartBody');
-    const totalEl = document.getElementById('cartTotal');
-    
-    if (state.cart.length === 0) {
-        body.innerHTML = `
-            <div class="cart-empty">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <p>Your cart is empty</p>
-            </div>
-        `;
-        totalEl.textContent = '₹0';
-        return;
-    }
-    
-    let total = 0;
-    body.innerHTML = state.cart.map(item => {
-        total += item.price * item.quantity;
-        return `
-            <div class="cart-item">
-                <div class="cart-item-icon">
-                    <i class="fa-solid ${item.item_type === 'service' ? 'fa-concierge-bell' : 'fa-box'}"></i>
-                </div>
-                <div class="cart-item-details">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-price">₹${item.price}</div>
-                    <div class="cart-item-qty">Qty: ${item.quantity}</div>
-                </div>
-                <button class="cart-item-remove" onclick="removeFromCart(${item.id})">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-        `;
-    }).join('');
-    
-    totalEl.textContent = '₹' + total;
-}
-
-// Checkout
-function proceedToCheckout() {
-    if (state.cart.length === 0) {
-        showToast('Your cart is empty', 'info');
-        return;
-    }
-    closeCart();
-    showCheckoutModal();
-}
-
-function showCheckoutModal() {
-    const modal = document.getElementById('checkoutModal');
-    const content = document.getElementById('checkoutContent');
-    
-    let total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    content.innerHTML = `
-        <div class="order-summary">
-            <h4>Order Summary</h4>
-            ${state.cart.map(item => `
-                <div class="order-item">
-                    <span>${item.name} × ${item.quantity}</span>
-                    <span>₹${item.price * item.quantity}</span>
-                </div>
-            `).join('')}
-            <div class="order-total">
-                <span>Total</span>
-                <span>₹${total}</span>
-            </div>
-        </div>
-        <form class="checkout-form" onsubmit="placeOrder(event)">
-            <div class="form-group">
-                <label>Delivery Address</label>
-                <textarea id="deliveryAddress" rows="3" placeholder="Enter your full address" required style="width:100%;padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;resize:vertical;"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Payment Method</label>
-                <select id="paymentMethod" required style="width:100%;padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);">
-                    <option value="cod">Cash on Delivery</option>
-                    <option value="upi">UPI</option>
-                    <option value="card">Card</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-submit">Place Order - ₹${total}</button>
-        </form>
-    `;
-    
-    modal.classList.add('active');
-}
-
-function closeCheckout() {
-    document.getElementById('checkoutModal').classList.remove('active');
-}
-
-async function placeOrder(e) {
-    e.preventDefault();
-    const address = document.getElementById('deliveryAddress').value;
-    const payment = document.getElementById('paymentMethod').value;
-    
-    try {
-        const data = await api('/orders', {
-            method: 'POST',
-            body: JSON.stringify({ 
-                shipping_address: address, 
-                payment_method: payment 
-            })
+        html += '<div class="comparison-table"><table>';
+        html += '<tr><th>Name</th><th>Price</th><th>Rating</th><th>Reviews</th><th>Vendor</th></tr>';
+        items.forEach(item => {
+            const isBest = data.recommendation && (item.id === data.recommendation.service_id || item.id === data.recommendation.product_id);
+            html += `<tr ${isBest ? 'class="best-choice"' : ''}>`;
+            html += `<td><strong>${item.name}</strong>${isBest ? ' <span style="color:var(--accent)">★ Best Choice</span>' : ''}</td>`;
+            html += `<td>₹${item.price}</td>`;
+            html += `<td>${item.rating}★</td>`;
+            html += `<td>${item.review_count}</td>`;
+            html += `<td>${item.vendor_name}${item.vendor_verified ? ' ✓' : ''}</td>`;
+            html += '</tr>';
         });
-        
-        const content = document.getElementById('checkoutContent');
-        content.innerHTML = `
-            <div class="order-success">
-                <i class="fa-solid fa-circle-check"></i>
-                <h3>Order Placed Successfully!</h3>
-                <p>Thank you for your order</p>
-                <div class="order-number">#${data.order.id}</div>
-                <p>You will receive a confirmation shortly</p>
-                <button class="btn primary" onclick="closeCheckout()" style="margin-top: 20px;">Continue Shopping</button>
-            </div>
-        `;
-        
-        state.cart = [];
-        updateCartBadge();
-    } catch (e) {
-        showToast(e.message, 'error');
+        html += '</table></div>';
+
+        container.innerHTML = html;
     }
-}
 
-// User Dropdown
-function toggleUserDropdown() {
-    document.getElementById('userDropdown').classList.toggle('active');
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', (e) => {
-    const dropdown = document.getElementById('userDropdown');
-    const avatar = document.querySelector('.user-avatar');
-    if (dropdown && !dropdown.contains(e.target) && !avatar.contains(e.target)) {
-        dropdown.classList.remove('active');
-    }
-});
-
-// Toast Notifications
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-    
-    toast.innerHTML = `
-        <i class="fa-solid ${icons[type]} toast-icon"></i>
-        <span class="toast-message">${message}</span>
-    `;
-    
-    container.appendChild(toast);
-    
-    setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 4000);
-}
-
-// Close modals on escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeAuthModal();
-        closeCart();
-        closeCheckout();
-    }
-});
-
-// Close modal when clicking overlay
-document.getElementById('authModal').addEventListener('click', (e) => {
-    if (e.target.id === 'authModal') closeAuthModal();
-});
-document.getElementById('checkoutModal').addEventListener('click', (e) => {
-    if (e.target.id === 'checkoutModal') closeCheckout();
+    console.log('🌟 iLoveSPSR Nellore loaded with Deep Research AI');
 });
