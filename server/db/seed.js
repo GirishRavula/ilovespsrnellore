@@ -100,8 +100,9 @@ const insertService = db.prepare(`
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 `);
 
+const vendorId = vendorResult.lastInsertRowid;
 services.forEach(svc => {
-    insertService.run(svc.category, 2, svc.name, svc.slug, svc.description, svc.price, svc.duration, (Math.random() * 1 + 4).toFixed(1), Math.floor(Math.random() * 200 + 20));
+    insertService.run(svc.category, vendorId, svc.name, svc.slug, svc.description, svc.price, svc.duration, (Math.random() * 1 + 4).toFixed(1), Math.floor(Math.random() * 200 + 20));
 });
 
 // Seed product categories
@@ -148,7 +149,7 @@ const insertProduct = db.prepare(`
 `);
 
 products.forEach(prod => {
-    insertProduct.run(prod.category, 2, prod.name, prod.slug, prod.description, prod.price, prod.mrp, prod.stock, prod.unit, prod.featured, (Math.random() * 1 + 4).toFixed(1), Math.floor(Math.random() * 150 + 10));
+    insertProduct.run(prod.category, vendorId, prod.name, prod.slug, prod.description, prod.price, prod.mrp, prod.stock, prod.unit, prod.featured, (Math.random() * 1 + 4).toFixed(1), Math.floor(Math.random() * 150 + 10));
 });
 
 console.log('✅ Database seeded successfully!\n');

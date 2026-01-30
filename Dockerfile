@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Install build dependencies for better-sqlite3
+RUN apk update && apk add --no-cache python3 make gcc g++ musl-dev
+
 # Copy package files
 COPY package*.json ./
 
@@ -36,7 +39,7 @@ USER nodejs
 ENV NODE_ENV=production
 ENV PORT=3001
 ENV DB_PATH=/app/data/ilovespsr.db
-ENV JWT_SECRET=your-super-secure-jwt-secret-change-in-production
+ENV JWT_SECRET=REPLACE_ME_IMMEDIATELY_IN_PRODUCTION
 
 # Expose port
 EXPOSE 3001
