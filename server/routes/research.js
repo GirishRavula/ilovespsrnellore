@@ -124,16 +124,40 @@ router.post('/products', (req, res) => {
 
         const products = db.prepare(sqlQuery).all(...params);
 
+        // Handle empty results
+        if (products.length === 0) {
+            return res.json({ 
+                query, 
+                products: [], 
+                insights: {
+                    total_found: 0,
+                    price_range: { min: 0, max: 0, avg: 0 },
+                    avg_rating: 0,
+                    avg_discount: 0,
+                    verified_sellers: 0,
+                    recommendations: []
+                },
+                search_metadata: {
+                    timestamp: new Date().toISOString(),
+                    filters_applied: { 
+                        min_price: min_price || 'none', 
+                        max_price: max_price || 'none',
+                        min_rating: min_rating || 'none'
+                    }
+                }
+            });
+        }
+
         // Calculate insights
         const insights = {
             total_found: products.length,
             price_range: {
                 min: Math.min(...products.map(p => p.price)),
                 max: Math.max(...products.map(p => p.price)),
-                avg: products.reduce((sum, p) => sum + p.price, 0) / products.length || 0
+                avg: products.reduce((sum, p) => sum + p.price, 0) / products.length
             },
-            avg_rating: products.reduce((sum, p) => sum + p.rating, 0) / products.length || 0,
-            avg_discount: products.reduce((sum, p) => sum + p.discount_percent, 0) / products.length || 0,
+            avg_rating: products.reduce((sum, p) => sum + p.rating, 0) / products.length,
+            avg_discount: products.reduce((sum, p) => sum + p.discount_percent, 0) / products.length,
             verified_sellers: products.filter(p => p.vendor_verified).length,
             recommendations: []
         };
@@ -181,6 +205,11 @@ router.post('/compare/services', (req, res) => {
 
         if (service_ids.length > 5) {
             return res.status(400).json({ error: 'Maximum 5 services can be compared at once' });
+        }
+
+        // Validate all IDs are numbers
+        if (!service_ids.every(id => !isNaN(parseInt(id)))) {
+            return res.status(400).json({ error: 'All service IDs must be valid numbers' });
         }
 
         const placeholders = service_ids.map(() => '?').join(',');
@@ -251,6 +280,11 @@ router.post('/compare/products', (req, res) => {
             return res.status(400).json({ error: 'Maximum 5 products can be compared at once' });
         }
 
+        // Validate all IDs are numbers
+        if (!product_ids.every(id => !isNaN(parseInt(id)))) {
+            return res.status(400).json({ error: 'All product IDs must be valid numbers' });
+        }
+
         const placeholders = product_ids.map(() => '?').join(',');
         const products = db.prepare(`
             SELECT p.*, pc.name as category_name,
@@ -316,7 +350,7 @@ router.get('/recommendations', authenticate, (req, res) => {
     try {
         const { type = 'all' } = req.query; // 'all', 'services', 'products'
 
-        // Get user's order history
+        // Get user's order history (limited to recent purchases)
         const userOrders = db.prepare(`
             SELECT oi.item_type, oi.item_id, COUNT(*) as purchase_count
             FROM orders o
@@ -324,6 +358,7 @@ router.get('/recommendations', authenticate, (req, res) => {
             WHERE o.user_id = ?
             GROUP BY oi.item_type, oi.item_id
             ORDER BY purchase_count DESC
+            LIMIT 50
         `).all(req.user.id);
 
         const recommendations = {
@@ -406,6 +441,7 @@ router.get('/analytics/:type/:id', (req, res) => {
                 FROM reviews
                 WHERE review_type = 'service' AND item_id = ?
                 ORDER BY created_at DESC
+                LIMIT 100
             `).all(id);
 
             relatedItems = db.prepare(`
@@ -435,6 +471,7 @@ router.get('/analytics/:type/:id', (req, res) => {
                 FROM reviews
                 WHERE review_type = 'product' AND item_id = ?
                 ORDER BY created_at DESC
+                LIMIT 100
             `).all(id);
 
             relatedItems = db.prepare(`
