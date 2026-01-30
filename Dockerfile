@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Install build dependencies for better-sqlite3
+RUN apk update && apk add --no-cache python3 make gcc g++ musl-dev
+
 # Copy package files
 COPY package*.json ./
 

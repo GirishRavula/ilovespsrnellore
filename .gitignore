@@ -67,3 +67,12 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# SQLite database files
+*.db
+*.db-wal
+*.db-shm
+data/
+server/db/*.db
+server/db/*.db-wal
+server/db/*.db-shm
