@@ -1,0 +1,20 @@
+# Render.com Configuration
+services:
+  - type: web
+    name: ilovespsrnellore
+    runtime: node
+    region: singapore  # Close to India
+    plan: free
+    buildCommand: npm install && npm run seed
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_PATH
+        value: /opt/render/project/src/data/ilovespsr.db
+    healthCheckPath: /api/health
+    autoDeploy: true
