@@ -70,11 +70,18 @@ npm start
 
 ## 🔐 Demo Credentials
 
+**⚠️ IMPORTANT**: These are demo accounts for testing. **CHANGE THESE CREDENTIALS** immediately after deployment!
+
 | Role | Email | Password |
 |------|-------|----------|
 | Customer | priya@gmail.com | customer123 |
 | Vendor | ravi@nelloreservices.com | vendor123 |
 | Admin | admin@ilovespsrnellore.com | admin123 |
+
+**After deploying to production:**
+1. Login with admin credentials
+2. Change all passwords immediately
+3. Or delete demo users and create new ones
 
 ## 🎯 Features
 
@@ -250,7 +257,17 @@ RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 ```
 
-**⚠️ Important**: Change `JWT_SECRET` to a strong random value in production!
+**⚠️ Generate Secure JWT Secret for Production:**
+
+```bash
+# Option 1: Using OpenSSL
+openssl rand -base64 32
+
+# Option 2: Using Node.js
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+
+# Copy the output and use it as your JWT_SECRET
+```
 
 ## 🏃 Scripts
 

@@ -39,7 +39,7 @@ USER nodejs
 ENV NODE_ENV=production
 ENV PORT=3001
 ENV DB_PATH=/app/data/ilovespsr.db
-ENV JWT_SECRET=your-super-secure-jwt-secret-change-in-production
+ENV JWT_SECRET=REPLACE_ME_IMMEDIATELY_IN_PRODUCTION
 
 # Expose port
 EXPOSE 3001

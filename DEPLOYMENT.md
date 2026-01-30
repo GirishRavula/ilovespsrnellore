@@ -53,10 +53,20 @@ npm start
    - Render will auto-detect the Dockerfile
 
 3. **Environment Variables** (Add in Render dashboard):
+
+   **⚠️ IMPORTANT**: Generate a secure JWT secret first:
+   ```bash
+   # Run locally to generate a secure secret:
+   openssl rand -base64 32
+   # OR
+   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+   ```
+   
+   Then add these variables:
    ```
    NODE_ENV=production
    PORT=3001
-   JWT_SECRET=<generate-a-secure-random-string>
+   JWT_SECRET=<paste-your-generated-secret-here>
    DB_PATH=/app/data/ilovespsr.db
    ```
 
@@ -130,6 +140,11 @@ exit
 - Ubuntu 20.04+ / Debian 11+
 - Node.js 18+ or Docker installed
 - Domain name (optional)
+
+**⚠️ IMPORTANT - Database Path Note:**
+- When using Docker: DB_PATH=/app/data/ilovespsr.db
+- When using Node.js locally: DB_PATH=./server/db/nellore.db
+- Adjust paths accordingly in your .env file
 
 ### Using Docker on VPS
 
@@ -225,7 +240,7 @@ docker cp ilovespsr-nellore:/app/data/backup.db ./backups/
 
 ```bash
 # Add to crontab
-0 2 * * * docker exec ilovespsr-nellore sqlite3 /app/data/ilovespsr.db ".backup '/app/data/backup-$(date +\%Y\%m\%d).db'"
+0 2 * * * docker exec ilovespsr-nellore sqlite3 /app/data/ilovespsr.db ".backup '/app/data/backup-$(date +%Y%m%d).db'"
 ```
 
 ## 📊 Monitoring
